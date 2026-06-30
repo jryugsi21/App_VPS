@@ -29,3 +29,4 @@ Tarea3.0/
 ├── requirements.txt                   # Dependencias del proyecto (Flask, Pytest)
 ├── Dockerfile                         # Instrucciones de construcción de la imagen de Docker
 └── README.md                          # Documentación del proyecto
+Jorge
