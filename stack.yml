@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+  alexander:
+    image: ghcr.io/alexander738022/proyecto:3.0.0
+    networks:
+      - traefik-public
+
+    deploy:
+      replicas: 1
+
+      update_config:
+        parallelism: 1
+        delay: 10s
+
+      restart_policy:
+        condition: on-failure
+
+      # ¡OJO AQUÍ! "labels:" debe estar alineado exactamente con "replicas", "update_config" y "restart_policy"
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.alexander.entrypoints=http"
+        - "traefik.http.routers.alexander.rule=Host(`alexander.byronrm.com`)"
+        - "traefik.http.middlewares.alexander-https-redirect.redirectscheme.scheme=https"
+        - "traefik.http.routers.alexander.middlewares=alexander-https-redirect"
+        - "traefik.http.routers.alexander-secure.entrypoints=https"
+        - "traefik.http.routers.alexander-secure.rule=Host(`alexander.byronrm.com`)"
+        - "traefik.http.routers.alexander-secure.tls=true"
+        - "traefik.http.routers.alexander-secure.tls.certresolver=http"
+        - "traefik.http.services.alexander-secure.loadbalancer.server.port=5000"
+        - "traefik.docker.network=traefik-public"
+
+networks:
+  traefik-public:
+    external: true
